@@ -1,0 +1,65 @@
+name: Build Windows
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build H-backtask for Windows
+    runs-on: windows-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Show Flutter version
+        run: flutter --version
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze Dart code
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Build Windows release
+        run: flutter build windows --release
+
+      - name: Package release bundle
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $releaseDir = Join-Path $env:GITHUB_WORKSPACE 'build\windows\x64\runner\Release'
+          if (-not (Test-Path (Join-Path $releaseDir 'h_backtask.exe'))) {
+            $releaseDir = Join-Path $env:GITHUB_WORKSPACE 'build\windows\runner\Release'
+          }
+          if (-not (Test-Path (Join-Path $releaseDir 'h_backtask.exe'))) {
+            throw 'Release folder does not contain h_backtask.exe.'
+          }
+          $zipPath = Join-Path $env:GITHUB_WORKSPACE 'H-backtask-windows-x64.zip'
+          Compress-Archive -Path (Join-Path $releaseDir '*') -DestinationPath $zipPath -CompressionLevel Optimal
+          Write-Host "Packaged release bundle: $zipPath"
+
+      - name: Upload Windows release bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: H-backtask-windows-x64
+          path: H-backtask-windows-x64.zip
+          if-no-files-found: error
+          retention-days: 14
