@@ -1,5 +1,6 @@
 # H-backtask
 - 日本向け
+- Fire 7 2019の公式FireOSでも、Lineageosのようなサクサク差が手に入ります。タスクキルアプリとは根本的に構造が違います。
 - 全バージョンH-SelfishTaskは、全選択でAndroidシステムをとSystemUIを止めてしまうという危険な問題があったため、非公開に。今回のバージョンでは、デフォルトではシステムUIは選べなくしています。
 AndroidOS / FireOS端末の待機バケット（App Standby Bucket）を、WindowsのMaterial You（Flutter Material 3）UIから確認・変更するデスクトップアプリです。root権限は要求せず、Windowsにインストール済みのADBを利用します。
 
