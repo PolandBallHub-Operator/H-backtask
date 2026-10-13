@@ -1,6 +1,6 @@
 # H-backtask
 - 日本向け
-
+- 全バージョンH-SelfishTaskは、全選択でAndroidシステムをとSystemUIを止めてしまうという危険な問題があったため、非公開に。今回のバージョンでは、デフォルトではシステムUIは選べなくしています。
 AndroidOS / FireOS端末の待機バケット（App Standby Bucket）を、WindowsのMaterial You（Flutter Material 3）UIから確認・変更するデスクトップアプリです。root権限は要求せず、Windowsにインストール済みのADBを利用します。
 
 ## 機能
